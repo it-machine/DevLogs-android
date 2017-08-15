@@ -155,23 +155,23 @@ public class DevLogs {
     }
 
     public String showLog() {
-
-        StringBuilder sb = new StringBuilder();
-        for (LogModel log : logs.logs) {
-            String dateString = DateFormat.getDateTimeInstance().format(log.date);
-            sb.append("[");
-            sb.append(dateString);
-            sb.append("] ");
-            sb.append(log.name);
-            if (log.value != null) {
-                sb.append(" [");
-                sb.append(log.value);
-                sb.append("]");
+        synchronized (lock) {
+            StringBuilder sb = new StringBuilder();
+            for (LogModel log : logs.logs) {
+                String dateString = DateFormat.getDateTimeInstance().format(log.date);
+                sb.append("[");
+                sb.append(dateString);
+                sb.append("] ");
+                sb.append(log.name);
+                if (log.value != null) {
+                    sb.append(" [");
+                    sb.append(log.value);
+                    sb.append("]");
+                }
+                sb.append("\n\n");
             }
-            sb.append("\n\n");
+            return sb.toString();
         }
-
-        return sb.toString();
     }
 
 }
