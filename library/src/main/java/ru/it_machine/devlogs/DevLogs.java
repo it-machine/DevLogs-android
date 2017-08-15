@@ -131,7 +131,17 @@ public class DevLogs {
         }).start();
     }
 
+    public interface SendToServerCallback {
+        void onSuccess();
+
+        void onFailure(Throwable t);
+    }
+
     public void sendToServer() {
+        sendToServer(null);
+    }
+
+    public void sendToServer(final SendToServerCallback callback) {
         requestInterface.fetchSendLog(
                 userToken,
                 appToken,
@@ -144,12 +154,16 @@ public class DevLogs {
                 .enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {
-
+                        if (callback != null) {
+                            callback.onSuccess();
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<Void> call, Throwable t) {
-
+                        if (callback != null) {
+                            callback.onFailure(t);
+                        }
                     }
                 });
     }
